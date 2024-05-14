@@ -1,7 +1,8 @@
 import express from 'express'
 import dotenv from 'dotenv'
-import { supabase } from './Config/config.supabase.js';
-
+import SongModel from './Models/song.model.js';
+import AlbumModel from './Models/album.model.js';
+import ArtistModel from './Models/artist.model.js';
 const app = express()
 dotenv.config()
 
@@ -18,36 +19,18 @@ app.post('/', (req, res) => {
 })
 
 app.get('/sange', async (req, res) => {
-    const { data, error } = await supabase
-        .from('songs')
-        .select('id, title')
-    if(error) {
-        console.error(error);
-    } else {
-        res.send(data);
-    }
+    const data = await SongModel.getAllRecords()
+    res.send(data)
 })
 
-app.get('/artists', async (req, res) => {
-    const { data, error } = await supabase
-        .from('artists')
-        .select('id, name, description, image, created_at, updated_at')
-    if(error) {
-        console.error(error);
-    } else {
-        res.send(data);
-    }
+app.get('/artister', async (req, res) => {
+    const data = await ArtistModel.getAllArtists()
+    res.send(data)
 })
 
 app.get('/albums', async (req, res) => {
-    const { data, error } = await supabase
-        .from('albums')
-        .select('title, image, artists(name))')
-    if(error) {
-        console.error(error);
-    } else {
-        res.send(data);
-    }
+    const data = await AlbumModel.getAllAlbums()
+    res.send(data)
 })
 
 app.get('/about', (req, res) => {
